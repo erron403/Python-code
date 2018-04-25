@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
+# Created By: RaVierma
+#
+#
+# The order of starting and ending position values.
+#
+#          |    |
+#	1  |  2 |  3  
+#     -----|----|-----
+#          |    |
+#	4  |  5 |  6  
+#     -----|----|-----
+#          |    |  
+#	7  |  8 |  9
+#
 
 barr = [ x *3 for x in [[' '],[' '],[' ']]]
-arr_track = [[1,2,3],
-        [4,5,6],
-        [7,8,9]]
+arr_track = [[1,2,3],[4,5,6],[7,8,9]]
 usr_position_track = []
 win_count = {"player_X":0 , "player_O": 0}
 wins_type_count = {"hr_win": [], "vrt_win": [], "right_dig":0, "left_dig":0}
@@ -76,6 +88,7 @@ def hr_and_vrt_win_helper(arr,win_type):
                 win_count["player_O"] += 1
                 wins_type_count[win_type].append(arr.index(r))
                 break
+
     
 def right_dignol():
     rdig = [barr[0][0],barr[1][1],barr[2][2]]
@@ -100,6 +113,13 @@ def dignol_helper(arr,win_type):
             win_count["player_X"] += 1
             wins_type_count[win_type] = 1
 
+
+def game_reset():
+    global barr
+    barr = [ x *3 for x in [[' '],[' '],[' ']]]
+    arr_track.clear()
+
+    
 def all_checks(player):
     '''
     Check all condition and promt for input
@@ -114,6 +134,7 @@ def all_checks(player):
         while int(position) not in [p for p in range(1, 10)]:
             print(f"\n\t[ {'+' *4} Must be within 1 to 9 {'+' *4} ]\n")
             position = input(f"Player {player}: Enter position where you want to be {player}: ")
+        # check for already use position    
         while int(position) in usr_position_track:
             print(f"\n\t[ {'+' *4} Must be within 1 to 9 but not already use {'+' *4} ]\n")
             position = input(f"Player {player}: Enter position where you want to be {player}: ")
@@ -126,10 +147,6 @@ def all_checks(player):
         left_dignol()
         print(f"Score: Player X: {win_count['player_X']}\tV/S\t Palyer O: {win_count['player_O']}\n")
     
-def game_reset():
-    global barr
-    barr = [ x *3 for x in [[' '],[' '],[' ']]]
-    arr_track.clear()
             
 def main():    
     end = "yes"
