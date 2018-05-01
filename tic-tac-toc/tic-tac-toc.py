@@ -16,10 +16,10 @@
 
 import random
 
-barr = [ x *3 for x in [[' '],[' '],[' ']]]
-arr_track = [[1,2,3],[4,5,6],[7,8,9]]
+barr = [x *3 for x in [[' '], [' '], [' ']]]
+arr_track = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 usr_position_track = []
-win_count = {"player_A":0 , "player_B": 0}
+win_count = {"player_A":0, "player_B": 0}
 wins_type_count = {"hr_win": [], "vrt_win": [], "right_dig":0, "left_dig":0}
 
         
@@ -32,17 +32,20 @@ def board_play():
         {' '*2} |    |\n\t{barr[2][0]}{' '*2}|  {barr[2][1]} |{' '*2}{barr[2][2]}\n{' '*6}
         """)
 
-def place_userinput(player,position):
+def place_userinput(player, position):
+    '''
+    place user given positon on board
+    '''
     position = int(position)
-    if position <= 3 and not position <= 0 and position not in usr_position_track:
+    if position <= 3 and position > 0 and position not in usr_position_track:
         barr[0][arr_track[0].index(position)] = player
         usr_position_track.append(position)
         
-    elif position <= 6 and not position <= 3 and position not in usr_position_track:
+    elif position <= 6 and position > 3 and position not in usr_position_track:
         barr[1][arr_track[1].index(position)] = player
         usr_position_track.append(position)
         
-    elif position <= 9 and not position <= 6 and position not in usr_position_track:
+    elif position <= 9 and position > 6 and position not in usr_position_track:
         barr[2][arr_track[2].index(position)] = player
         usr_position_track.append(position)
         
@@ -51,9 +54,15 @@ def place_userinput(player,position):
 
     
 def hr_win():
+    '''
+    horizontal check
+    '''
     hr_and_vrt_win_helper(barr, "hr_win")
 
 def vrt_win():
+    '''
+    vertical check
+    '''
     # intialize the column by 0
     col = 0
     # create list to add columns as list.
@@ -68,10 +77,10 @@ def vrt_win():
         # increment the column and repeate same process.
         col += 1
     # after covert column to row then perform vertical check
-    hr_and_vrt_win_helper(col_to_row,"vrt_win")
+    hr_and_vrt_win_helper(col_to_row, "vrt_win")
     
                          
-def hr_and_vrt_win_helper(arr,win_type):
+def hr_and_vrt_win_helper(arr, win_type):
     """"
     It Take two argument:
     arr: list on which win type perform
@@ -93,14 +102,20 @@ def hr_and_vrt_win_helper(arr,win_type):
 
     
 def right_dignol():
-    rdig = [barr[0][0],barr[1][1],barr[2][2]]
-    dignol_helper(rdig,"right_dig")
+    '''
+    check right dignol for win check
+    '''
+    rdig = [barr[0][0], barr[1][1], barr[2][2]]
+    dignol_helper(rdig, "right_dig")
 
 def left_dignol():
-    ldig = [barr[0][2],barr[1][1],barr[2][0]]
-    dignol_helper(ldig,"left_dig")
+    '''
+    check left dignol for win check
+    '''
+    ldig = [barr[0][2], barr[1][1], barr[2][0]]
+    dignol_helper(ldig, "left_dig")
 
-def dignol_helper(arr,win_type):
+def dignol_helper(arr, win_type):
     """
     This is digno check helper:
     arr: list on which action perform.
@@ -116,17 +131,20 @@ def dignol_helper(arr,win_type):
             wins_type_count[win_type] = 1
 
 def game_reset():
+    '''
+    game reset
+    '''
     global barr
-    barr = [ x *3 for x in [[' '],[' '],[' ']]]
+    barr = [x *3 for x in [[' '], [' '], [' ']]]
     global win_count
-    win_count = win_count = {"player_A":0 , "player_B": 0}
+    win_count = win_count = {"player_A":0, "player_B": 0}
     global wins_type_count
     wins_type_count = {"hr_win": [], "vrt_win": [], "right_dig":0, "left_dig":0}
     usr_position_track.clear()
     print(f"\n{'#' * 49}\n\t[ Game has been restart... ]\n")
     main()
     
-def all_checks(player,name):
+def all_checks(player, name):
     '''
     Check all condition and promt for input
     '''
@@ -147,7 +165,7 @@ def all_checks(player,name):
             else:
                 break
             
-        place_userinput(player,position)
+        place_userinput(player, position)
         board_play()
         hr_win()
         vrt_win()
@@ -159,7 +177,7 @@ def main():
     player1 = str(input("What is your marker X or O ?\n=> ")).upper()
     player2 = "X" if (player1.upper() != "X") else "O"
     print(f"[ Player A ]: your marker is: {player1}\n[ Player B ]: your marker is: {player2}")
-    random_player = random.randint(0,1)
+    random_player = random.randint(0, 1)
     
     _quit, restart = "No"
     while _quit in ["no", "n", "N", "No"]:
@@ -168,11 +186,11 @@ def main():
             
         board_play()
         if (random_player == 0) and (len(usr_position_track) == 0):
-            all_checks(player1,"A")
+            all_checks(player1, "A")
             all_checks(player2, "B")
         else:
-            all_checks(player2,"B")
-            all_checks(player1,"A")
+            all_checks(player2, "B")
+            all_checks(player1, "A")
   
         if len(usr_position_track) == 9:
             _quit = "yes"
