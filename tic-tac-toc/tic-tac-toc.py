@@ -131,20 +131,22 @@ def all_checks(player,name):
     Check all condition and promt for input
     '''
     if len(usr_position_track) != 9:
-        # check for numeric
-        position = input(f"Player {name}: Enter position where you want to be {player}: ")
-        while not position.isnumeric():
-            print(f"\n\t[ {'+' *4} Must be within 1 to 9 {'+' *4} ]\n")
-            position = input(f"Player {name}: Enter position where you want to be {player}: ")
-        # check for within range    
-        while int(position) not in [p for p in range(1, 10)]:
-            print(f"\n\t[ {'+' *4} Must be within 1 to 9 {'+' *4} ]\n")
-            position = input(f"Player {name}: Enter position where you want to be {player}: ")
-        # check for already use position    
-        while int(position) in usr_position_track:
-            print(f"\n\t[ {'+' *4} Must be within 1 to 9 but not already use {'+' *4} ]\n")
-            position = input(f"Player {name}: Enter position where you want to be {player}: ")
-                                                              
+        while True:
+            try:
+                position = int(input(f"Player {name}: Enter position where you want to be {player}: "))
+                if position not in [p for p in range(1, 10)]:
+                    raise IndexError
+                elif position in usr_position_track:
+                    raise AssertionError
+            except IndexError:
+                print(f"\n\t[ {'+' *4} Must be within 1 to 9 {'+' *4} ]\n")
+                continue
+            except AssertionError:
+                print(f"\n\t[ {'+' *4} Must be within 1 to 9 but not already use {'+' *4} ]\n")
+                continue
+            else:
+                break
+            
         place_userinput(player,position)
         board_play()
         hr_win()
